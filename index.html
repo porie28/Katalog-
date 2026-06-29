@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KatalogKu - Sistem Manajemen Katalog Pintar</title>
-    <!-- Tailwind CSS untuk Desain Premium -->
+    <title>KatalogKu Pro - Auto Sync Google Sheets</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -16,27 +16,25 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- HEADER / NAVIGATION -->
+    <!-- HEADER -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-3">
-                    <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-md shadow-indigo-200">
-                        <!-- Icon Box -->
+                    <div class="bg-emerald-600 text-white p-2 rounded-xl shadow-md shadow-emerald-200">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold text-slate-900 tracking-tight">KatalogKu</h1>
-                        <p class="text-xs text-slate-500 font-medium">Katalog Pintar & Sync Google Sheets</p>
+                        <h1 class="text-lg font-bold text-slate-900 tracking-tight">KatalogKu <span class="text-emerald-600">Auto-Sync</span></h1>
+                        <p class="text-xs text-slate-500 font-medium">1-Click Google Sheets Integration</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-3">
-                    <!-- Penanda Status Koneksi -->
-                    <span id="connection-badge" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                        <span class="w-2 h-2 mr-2 bg-amber-500 rounded-full animate-pulse"></span>
-                        Belum Terhubung Sheets
+                <div class="flex items-center space-x-2">
+                    <span id="webhook-badge" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                        <span class="w-2 h-2 mr-2 bg-rose-500 rounded-full animate-ping"></span>
+                        Koneksi Belum Aktif
                     </span>
                 </div>
             </div>
@@ -45,123 +43,166 @@
 
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         
-        <!-- EDUKASI & PENJELASAN ALUR SINKRONISASI -->
-        <div class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white rounded-2xl p-6 shadow-xl shadow-indigo-100 mb-8 relative overflow-hidden">
-            <div class="absolute right-0 bottom-0 opacity-10 translate-x-10 translate-y-10">
-                <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"></path>
-                </svg>
-            </div>
-            <div class="relative z-10 max-w-3xl">
-                <span class="bg-indigo-400 bg-opacity-30 text-indigo-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">💡 WAJIB TAHU</span>
-                <h2 class="text-2xl font-bold mt-2">Bagaimana Cara Menyimpan Data Anda Selamanya?</h2>
-                <p class="text-indigo-100 text-sm mt-2 leading-relaxed">
-                    Sistem Google Sheets bekerja secara <strong>Satu Arah (Sheets &rarr; Web)</strong>. 
-                    Jika Anda menambah/mengubah produk melalui tombol <span class="bg-white/20 px-1.5 py-0.5 rounded font-mono">Tambah Produk</span> di web ini, pastikan untuk menekan tombol <span class="bg-white/20 px-1.5 py-0.5 rounded font-mono">Ekspor ke Sheets</span> untuk menyalin data baru Anda kembali ke Google Sheets agar tidak terhapus saat disinkronkan kembali!
+        <!-- CARA SETTING APPS SCRIPT -->
+        <div class="bg-slate-900 text-white rounded-3xl p-6 shadow-xl mb-8 relative overflow-hidden">
+            <div class="relative z-10">
+                <div class="flex items-center space-x-2 mb-3">
+                    <span class="bg-emerald-500 text-slate-950 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">⚡ FITUR AKTIF: 1-CLICK INSTANT WRITE</span>
+                </div>
+                <h2 class="text-xl font-bold">Koneksi Otomatis Google Sheets Aktif!</h2>
+                <p class="text-slate-300 text-xs mt-1 leading-relaxed max-w-3xl">
+                    Sistem ini terintegrasi langsung menggunakan Google Apps Script. Tambahkan produk baru melalui tombol di bawah, dan data Anda akan langsung terkirim dan tersimpan rapi di spreadsheet tanpa ketik ulang maupun copy-paste manual.
                 </p>
+                <div class="mt-4 flex flex-wrap gap-3">
+                    <button onclick="toggleScriptGuide()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2.5 px-4 rounded-xl transition duration-200 flex items-center">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        Lihat Petunjuk Integrasi Google Sheets (Sekali Pasang)
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- DASHBOARD CONTROLS -->
+        <!-- PETUNJUK KODE APPS SCRIPT -->
+        <div id="script-guide-box" class="hidden bg-white border-2 border-emerald-100 rounded-3xl p-6 mb-8 shadow-sm">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-md font-bold text-slate-900 flex items-center">
+                    <span class="bg-emerald-100 text-emerald-700 p-1.5 rounded-lg mr-2">⚙️</span>
+                    Konfigurasi Apps Script (Hanya Perlu Dilakukan Sekali)
+                </h3>
+                <button onclick="toggleScriptGuide()" class="text-slate-400 hover:text-slate-600 text-xs font-bold">Tutup &times;</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600">
+                <div class="space-y-3">
+                    <p class="leading-relaxed"><strong class="text-slate-800">Langkah 1:</strong> Buka Google Sheets target Anda.</p>
+                    <p class="leading-relaxed"><strong class="text-slate-800">Langkah 2:</strong> Klik menu <strong class="text-slate-800">Ekstensi / Extensions</strong> di bagian atas &rarr; klik <strong class="text-slate-800">Apps Script</strong>.</p>
+                    <p class="leading-relaxed"><strong class="text-slate-800">Langkah 3:</strong> Hapus kode bawaan yang kosong, paste kode hijau di samping kanan ini.</p>
+                    <p class="leading-relaxed"><strong class="text-slate-800">Langkah 4:</strong> Klik <strong class="text-slate-800">Simpan 💾</strong>.</p>
+                    <p class="leading-relaxed"><strong class="text-slate-800">Langkah 5:</strong> Klik <strong class="text-slate-800">Terapkan (Deploy)</strong> &rarr; pilih <strong class="text-slate-800">Penerapan Baru (New Deployment)</strong>.</p>
+                    <p class="leading-relaxed"><strong class="text-slate-800">Langkah 6:</strong> Klik tombol gerigi di sebelah kiri 'Pilih Jenis' &rarr; Pilih <strong class="text-slate-800">Aplikasi Web / Web App</strong>.</p>
+                    <p class="leading-relaxed"><strong class="text-slate-800">Langkah 7:</strong> Ubah pengaturan <strong class="text-slate-800">Yang memiliki akses</strong> menjadi <strong class="text-emerald-600 font-bold">"Siapa saja" / "Anyone"</strong>.</p>
+                    <p class="leading-relaxed"><strong class="text-slate-800">Langkah 8:</strong> Jalankan deploy, berikan izin Google Anda, lalu salin <strong class="text-emerald-600 font-bold">URL Aplikasi Web</strong> yang didapatkan ke kolom Panel 2 di bawah.</p>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center bg-slate-900 text-slate-300 px-3 py-1.5 rounded-t-xl">
+                        <span class="font-mono text-[10px]">Google Apps Script Code</span>
+                        <button onclick="copyAppsScriptCode()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] px-2 py-0.5 rounded transition">Salin Kode</button>
+                    </div>
+                    <textarea id="apps-script-textarea" readonly class="w-full h-56 font-mono text-[10px] p-3 bg-slate-900 text-emerald-400 rounded-b-xl focus:outline-none" style="resize: none;">
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("KATALOG BARANG");
+  if (!sheet) {
+    sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+  }
+  
+  var data = JSON.parse(e.postData.contents);
+  
+  sheet.appendRow([
+    data.nama,
+    data.kategori,
+    data.harga,
+    data.deskripsi,
+    data.gambar,
+    data.stok
+  ]);
+  
+  return ContentService.createTextOutput(JSON.stringify({
+    "status": "success", 
+    "message": "Data '" + data.nama + "' sukses masuk Google Sheets!"
+  })).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet(e) {
+  return ContentService.createTextOutput(JSON.stringify({
+    "status": "success", 
+    "message": "Apps Script Terhubung!"
+  })).setMimeType(ContentService.MimeType.JSON);
+}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL KONEKSI & AKSI -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
             
-            <!-- PANEL 1: LINK GOOGLE SHEET -->
+            <!-- PANEL 1: BACA DATA -->
             <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
                 <div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
-                        Hubungkan Google Sheet
+                    <h3 class="text-sm font-bold text-slate-900 mb-1 flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
+                        1. Tautan Pembacaan Katalog (CSV)
                     </h3>
-                    <p class="text-xs text-slate-500 mb-4 leading-relaxed">Masukkan URL hasil Publikasikan Web (format CSV) dari spreadsheet Anda.</p>
-                    
-                    <div class="space-y-3">
-                        <input type="text" id="sheet-url-input" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv" 
-                               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm">
-                        <span class="text-[11px] text-slate-400 block leading-tight">Pastikan Anda memilih format <strong>"Nilai yang dipisahkan koma (.csv)"</strong> saat mempublikasikan ke web.</span>
-                    </div>
+                    <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">Masukkan URL hasil Publikasikan CSV Google Sheets Anda untuk menampilkan daftar barang ke web.</p>
+                    <input type="text" id="sheet-url-input" placeholder="https://docs.google.com/spreadsheets/.../pub?output=csv" 
+                           class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none text-xs">
                 </div>
-                
-                <div class="mt-6 flex gap-2">
-                    <button onclick="syncDataFromSheet()" id="btn-sync" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center shadow-md shadow-indigo-100">
-                        <svg id="sync-icon" class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.253 8H18"></path></svg>
-                        <span id="sync-text">Sinkronkan Data</span>
+                <div class="mt-4 flex gap-2">
+                    <button onclick="syncDataFromSheet()" id="btn-sync" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2.5 px-3 rounded-xl transition flex items-center justify-center">
+                        <svg id="sync-icon" class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.253 8H18"></path></svg>
+                        <span id="sync-text">Refresh Etalase</span>
                     </button>
-                    <button onclick="clearSheetConnection()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-3 rounded-xl transition" title="Putuskan Koneksi">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    <button onclick="clearSheetConnection()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 rounded-xl transition" title="Putuskan">
+                        &times;
                     </button>
                 </div>
             </div>
 
-            <!-- PANEL 2: MANAJEMEN BARANG -->
+            <!-- PANEL 2: ALAMAT PENGIRIMAN OTOMATIS -->
             <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
                 <div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Buat & Input Barang Baru
+                    <h3 class="text-sm font-bold text-slate-900 mb-1 flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
+                        2. Tautan Kirim Otomatis (Apps Script URL)
                     </h3>
-                    <p class="text-xs text-slate-500 mb-4 leading-relaxed">Tambah produk baru secara langsung melalui form interaktif di website ini.</p>
-                    
-                    <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 flex items-center justify-between">
-                        <div>
-                            <span class="text-xs text-slate-400 block">Total Produk Web saat ini:</span>
-                            <span id="local-count" class="text-lg font-bold text-slate-800">0 Produk</span>
-                        </div>
-                        <span class="px-2 py-1 text-[10px] bg-amber-100 text-amber-800 font-semibold rounded-full uppercase">Lokal</span>
-                    </div>
+                    <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">Masukkan alamat URL Aplikasi Web (Web App URL) dari hasil Deploy Apps Script Anda.</p>
+                    <input type="text" id="webhook-url-input" oninput="saveWebhookUrl()" placeholder="https://script.google.com/macros/s/.../exec" 
+                           class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none text-xs">
                 </div>
-                
-                <div class="mt-6">
-                    <button onclick="openAddModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center shadow-lg shadow-slate-100">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
-                        Tambah Produk Baru ke Web
+                <div class="mt-4">
+                    <button onclick="testWebhook()" id="btn-test-webhook" class="w-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold py-2.5 px-3 rounded-xl transition flex items-center justify-center">
+                        Tes Jalur Pengiriman
                     </button>
                 </div>
             </div>
 
-            <!-- PANEL 3: EKSPOR BALIK KE GOOGLE SHEETS -->
+            <!-- PANEL 3: TAMBAH DATA LANGSUNG -->
             <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
                 <div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20"></path></svg>
-                        Ekspor ke Google Sheets
+                    <h3 class="text-sm font-bold text-slate-900 mb-1 flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
+                        3. Aksi Tambah Produk Baru
                     </h3>
-                    <p class="text-xs text-slate-500 mb-4 leading-relaxed">Salin produk yang Anda buat di web ini, lalu paste (tempel) di Google Sheet untuk mengamankan data Anda.</p>
-                    
-                    <div id="export-warning-box" class="bg-emerald-50 border border-emerald-100 rounded-xl p-3 flex items-center space-x-2 text-emerald-800">
-                        <svg class="w-5 h-5 flex-shrink-0 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <span class="text-xs leading-snug">Semua produk aman dan sinkron dengan Google Sheets!</span>
+                    <p class="text-[11px] text-slate-500 mb-4 leading-relaxed">Begitu Anda mengisi data produk baru di sini, data akan langsung diposting secara instan ke spreadsheet.</p>
+                    <div id="connection-status-msg" class="text-[11px] font-semibold text-rose-600 bg-rose-50 border border-rose-100 p-2 rounded-xl text-center">
+                        ⚠️ Harap hubungkan Tautan Kirim di Panel 2!
                     </div>
                 </div>
-                
-                <div class="mt-6 flex gap-2">
-                    <button onclick="openExportModal()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center shadow-md shadow-emerald-100">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                        Ekspor Data Baru
-                    </button>
-                    <button onclick="clearAllLocalProducts()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 p-3 rounded-xl transition" title="Bersihkan Semua Data Lokal">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                <div class="mt-4">
+                    <button onclick="openAddModal()" id="btn-add-trigger" disabled class="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white text-xs font-bold py-3 px-4 rounded-xl transition shadow-md">
+                        + Tambah Produk Baru ke Sheets
                     </button>
                 </div>
             </div>
 
         </div>
 
-        <!-- FILTER & SECTIONS -->
+        <!-- ETALASE PRODUK -->
         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm mb-8">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h3 class="text-lg font-bold text-slate-900">Etalase Katalog Barang</h3>
-                    <p class="text-xs text-slate-500">Menampilkan seluruh data produk dari Google Sheets dan input lokal Anda.</p>
+                    <h3 class="text-base font-bold text-slate-900">Katalog Barang Tersinkronisasi</h3>
+                    <p class="text-xs text-slate-500">Menampilkan seluruh isi produk Anda langsung dari pembacaan Google Sheets.</p>
                 </div>
                 
                 <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
                     <!-- Cari -->
                     <div class="relative flex-grow md:flex-grow-0">
-                        <input type="text" id="search-input" oninput="renderCatalog()" placeholder="Cari barang..." class="w-full md:w-64 pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
-                        <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <input type="text" id="search-input" oninput="renderCatalog()" placeholder="Cari produk..." class="w-full md:w-64 pl-10 pr-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none text-xs">
+                        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
                     <!-- Filter Kategori -->
-                    <select id="category-filter" onchange="renderCatalog()" class="px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm bg-white cursor-pointer">
+                    <select id="category-filter" onchange="renderCatalog()" class="px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none text-xs bg-white cursor-pointer">
                         <option value="">Semua Kategori</option>
                     </select>
                 </div>
@@ -170,189 +211,202 @@
 
         <!-- GRID PRODUK -->
         <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Render via JS -->
+            <!-- Diisi JS -->
         </div>
 
-        <!-- TAMPILAN KOSONG / EMPTY STATE -->
-        <div id="empty-state" class="hidden bg-white border border-slate-200 rounded-2xl p-16 text-center max-w-lg mx-auto shadow-sm my-12">
-            <div class="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0V9a2 2 0 00-2-2H6a2 2 0 00-2 2v4.5m16 3H4"></path></svg>
+        <!-- EMPTY STATE -->
+        <div id="empty-state" class="hidden bg-white border border-slate-200 rounded-3xl p-12 text-center max-w-lg mx-auto shadow-sm my-8">
+            <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0V9a2 2 0 00-2-2H6a2 2 0 00-2 2v4.5m16 3H4"></path></svg>
             </div>
-            <h4 class="text-lg font-bold text-slate-900 mb-2">Katalog Anda Masih Kosong</h4>
-            <p class="text-sm text-slate-500 leading-relaxed mb-6">Silakan hubungkan ke Google Sheets Anda yang sudah terisi barang, atau tambahkan produk baru secara manual menggunakan tombol di atas.</p>
-            <button onclick="openAddModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-3 px-6 rounded-xl transition duration-200 shadow-md shadow-indigo-100 inline-flex items-center">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                Tambah Produk Pertama
-            </button>
+            <h4 class="text-base font-bold text-slate-950 mb-1">Daftar Produk Kosong / Belum Terkoneksi</h4>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">Pastikan Anda telah memasukkan URL Google Sheets CSV pada Panel 1 di atas lalu tekan tombol Refresh.</p>
         </div>
 
     </main>
 
     <!-- FOOTER -->
     <footer class="bg-white border-t border-slate-200 py-6 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-xs text-slate-400">&copy; 2026 KatalogKu App. All Rights Reserved. Membantu sinkronisasi Katalog & Google Sheets Anda.</p>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-400">
+            &copy; 2026 KatalogKu Pro. Sistem Penulisan Real-time 1-Klik Aktif.
         </div>
     </footer>
 
-    <!-- MODAL: TAMBAH PRODUK BARU -->
+    <!-- MODAL FORM TAMBAH PRODUK BARU -->
     <div id="add-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl w-full max-w-lg mx-4 shadow-2xl transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto">
-            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-3xl sticky top-0 z-10">
-                <h3 class="text-lg font-bold text-slate-900 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Tambah Produk Baru (Lokal)
+            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-3xl sticky top-0 z-10">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center">
+                    <span class="w-2.5 h-2.5 mr-2 bg-emerald-500 rounded-full animate-ping"></span>
+                    Tambah Produk Langsung ke Google Sheets
                 </h3>
-                <button onclick="closeAddModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg bg-white border border-slate-200 hover:shadow-sm transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <button onclick="closeAddModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg bg-white border border-slate-200 transition">
+                    &times;
                 </button>
             </div>
             
-            <form id="add-product-form" onsubmit="saveNewProduct(event)" class="p-6 space-y-4">
+            <form id="add-product-form" onsubmit="handleProductSubmission(event)" class="p-6 space-y-4">
+                <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-xl text-xs text-emerald-800 flex items-center">
+                    <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2"></span>
+                    Sistem Otomatis Aktif! Produk akan langsung ditulis ke spreadsheet.
+                </div>
+
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Produk <span class="text-rose-500">*</span></label>
-                    <input type="text" id="prod-name" required placeholder="Contoh: Pompa Air Shimizu" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm transition">
+                    <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Nama Produk <span class="text-rose-500">*</span></label>
+                    <input type="text" id="prod-name" required placeholder="Contoh: Lampu LED Philips 12W" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none text-xs transition">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kategori <span class="text-rose-500">*</span></label>
-                        <input type="text" id="prod-cat" required placeholder="Contoh: Pertukangan" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm transition">
+                        <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Kategori <span class="text-rose-500">*</span></label>
+                        <input type="text" id="prod-cat" required placeholder="Contoh: Elektronik" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none text-xs transition">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Stok <span class="text-rose-500">*</span></label>
-                        <input type="number" id="prod-stok" required placeholder="Contoh: 10" min="0" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm transition">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Harga (IDR) <span class="text-rose-500">*</span></label>
-                        <input type="number" id="prod-price" required placeholder="Contoh: 650000" min="0" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm transition">
+                        <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Stok <span class="text-rose-500">*</span></label>
+                        <input type="number" id="prod-stok" required placeholder="10" min="0" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none text-xs transition">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Link Gambar URL</label>
-                    <input type="url" id="prod-img" placeholder="https://example.com/gambar-produk.jpg" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm transition">
-                    <span class="text-[10px] text-slate-400 mt-1 block">Bila kosong, gambar default box yang menarik akan otomatis dipasang.</span>
+                    <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Harga (IDR) <span class="text-rose-500">*</span></label>
+                    <input type="number" id="prod-price" required placeholder="Contoh: 45000" min="0" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none text-xs transition">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Deskripsi Produk <span class="text-rose-500">*</span></label>
-                    <textarea id="prod-desc" required rows="3" placeholder="Tulis deskripsi spesifikasi produk Anda secara detail di sini..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm transition"></textarea>
+                    <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">URL Gambar Produk</label>
+                    <input type="url" id="prod-img" placeholder="https://example.com/gambar-produk.jpg" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none text-xs transition">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-1">Deskripsi <span class="text-rose-500">*</span></label>
+                    <textarea id="prod-desc" required rows="3" placeholder="Sebutkan deskripsi atau spesifikasi lengkap..." class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none text-xs transition"></textarea>
                 </div>
 
                 <div class="pt-4 flex gap-3 border-t border-slate-100">
-                    <button type="button" onclick="closeAddModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold py-3 px-4 rounded-xl transition duration-200 text-center">Batal</button>
-                    <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-3 px-4 rounded-xl transition duration-200 shadow-md shadow-indigo-100">Simpan Barang</button>
+                    <button type="button" onclick="closeAddModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold py-2.5 rounded-xl transition">Batal</button>
+                    <button type="submit" id="btn-submit-product" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2.5 rounded-xl transition shadow-md flex items-center justify-center">
+                        Kirim Langsung ke Sheets 🚀
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL: EKSPOR KE GOOGLE SHEETS (CSV FORMAT) -->
-    <div id="export-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-3xl w-full max-w-xl mx-4 shadow-2xl transform scale-95 transition-transform duration-300 max-h-[85vh] overflow-y-auto">
-            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-3xl sticky top-0 z-10">
-                <h3 class="text-lg font-bold text-slate-900 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                    Satu Langkah Lagi! Masukkan ke Google Sheets
-                </h3>
-                <button onclick="closeExportModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg bg-white border border-slate-200 hover:shadow-sm transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            
-            <div class="p-6 space-y-4">
-                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-amber-800 flex items-start space-x-3">
-                    <svg class="w-5 h-5 flex-shrink-0 text-amber-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    <div class="text-xs leading-relaxed">
-                        <strong class="font-bold">Penting:</strong> Salin baris di bawah ini dan tempelkan tepat di bawah baris data terakhir pada Google Sheet Anda. Ingat untuk **tidak menyalin ulang judul kolom (Header)** jika Anda hanya menambahkan data baru.
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex justify-between items-center mb-1.5">
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Data Format CSV</label>
-                        <button onclick="copyExportText()" class="text-xs bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold px-2.5 py-1 rounded-lg transition flex items-center">
-                            <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                            Salin Baris Baru
-                        </button>
-                    </div>
-                    <textarea id="export-textarea" readonly rows="6" class="w-full font-mono text-xs p-4 rounded-xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-0 leading-normal"></textarea>
-                </div>
-
-                <div>
-                    <h4 class="text-xs font-bold text-slate-800 mb-2">💡 Langkah-Langkah Memasukkan ke Google Sheets:</h4>
-                    <ol class="text-xs text-slate-500 space-y-2 list-decimal list-inside leading-relaxed">
-                        <li>Klik tombol <strong>"Salin Baris Baru"</strong> di atas.</li>
-                        <li>Buka spreadsheet Google Sheets Anda (<strong>KATALOG BARANG</strong>).</li>
-                        <li>Klik sel paling kiri di bawah produk terakhir Anda (misalnya di baris ke-4 kolom A).</li>
-                        <li>Gunakan jalan pintas keyboard: tekan <strong>Ctrl + V</strong> (Windows) atau <strong>Cmd + V</strong> (Mac) untuk langsung menempelkan baris.</li>
-                        <li>Selesai! Google Sheets Anda sekarang telah menyimpan data baru ini selamanya. Klik "Sinkronkan Data" di web untuk memverifikasi.</li>
-                    </ol>
-                </div>
-
-                <div class="pt-4 border-t border-slate-100 flex justify-end">
-                    <button onclick="closeExportModal()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold py-3 px-6 rounded-xl transition">Mengerti, Tutup</button>
-                </div>
-            </div>
-        </div>
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-950 text-white py-3 px-5 rounded-2xl shadow-xl flex items-center space-x-3 transition-transform duration-300 translate-y-24">
+        <div id="toast-icon" class="bg-emerald-600 p-1 rounded-lg text-white"></div>
+        <span id="toast-message" class="text-xs font-semibold">Berhasil!</span>
     </div>
 
-    <!-- TOAST NOTIFICATION SYSTEM -->
-    <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white py-3.5 px-5 rounded-2xl shadow-xl flex items-center space-x-3 transition-transform duration-300 translate-y-24">
-        <div id="toast-icon" class="bg-indigo-500 text-white p-1 rounded-lg">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-        </div>
-        <span id="toast-message" class="text-xs font-semibold">Tindakan Berhasil!</span>
-    </div>
-
-    <!-- LOGIK KODE APLIKASI (JAVASCRIPT) -->
     <script>
-        // Data State
-        let localProducts = [];  // Barang yang di-input manual di web
-        let syncedProducts = []; // Barang yang ditarik dari Google Sheets
+        let syncedProducts = [];
         let sheetUrl = "";
+        let webhookUrl = "";
 
-        // On Load, ambil data dari localStorage jika ada
         window.onload = function() {
-            const savedLocal = localStorage.getItem("katalog_local_products");
-            const savedSynced = localStorage.getItem("katalog_synced_products");
-            const savedUrl = localStorage.getItem("katalog_sheet_url");
+            // Load state
+            const savedSynced = localStorage.getItem("katalog_synced");
+            const savedUrl = localStorage.getItem("katalog_url");
+            const savedWebhook = localStorage.getItem("katalog_webhook");
 
-            if (savedLocal) localProducts = JSON.parse(savedLocal);
             if (savedSynced) syncedProducts = JSON.parse(savedSynced);
             if (savedUrl) {
                 sheetUrl = savedUrl;
                 document.getElementById("sheet-url-input").value = sheetUrl;
-                updateConnectionBadge(true);
+            }
+            if (savedWebhook) {
+                webhookUrl = savedWebhook;
+                document.getElementById("webhook-url-input").value = webhookUrl;
             }
 
+            checkWebhookState();
             renderCatalog();
-            updateLocalCount();
-            checkExportState();
         }
 
-        // Simpan koneksi url sheet & sync
-        async function syncDataFromSheet() {
-            const inputUrl = document.getElementById("sheet-url-input").value.trim();
-            if (!inputUrl) {
-                showToast("Masukkan URL Google Sheets terlebih dahulu!", "error");
+        function toggleScriptGuide() {
+            const guide = document.getElementById("script-guide-box");
+            guide.classList.toggle("hidden");
+        }
+
+        function copyAppsScriptCode() {
+            const textarea = document.getElementById("apps-script-textarea");
+            textarea.select();
+            document.execCommand('copy');
+            showToast("Kode Apps Script berhasil disalin!", "success");
+        }
+
+        // Simpan & Evaluasi Webhook URL
+        function saveWebhookUrl() {
+            webhookUrl = document.getElementById("webhook-url-input").value.trim();
+            localStorage.setItem("katalog_webhook", webhookUrl);
+            checkWebhookState();
+        }
+
+        function checkWebhookState() {
+            const badge = document.getElementById("webhook-badge");
+            const addTriggerBtn = document.getElementById("btn-add-trigger");
+            const statusMsg = document.getElementById("connection-status-msg");
+
+            if (webhookUrl && webhookUrl.startsWith("https://script.google.com/")) {
+                badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200";
+                badge.innerHTML = `<span class="w-2 h-2 mr-2 bg-emerald-500 rounded-full"></span>Auto-Sync Aktif`;
+                addTriggerBtn.disabled = false;
+                statusMsg.className = "text-[11px] font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 p-2 rounded-xl text-center";
+                statusMsg.innerHTML = "✓ Koneksi Siap untuk Menulis Data";
+            } else {
+                badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200";
+                badge.innerHTML = `<span class="w-2 h-2 mr-2 bg-rose-500 rounded-full animate-ping"></span>Koneksi Belum Aktif`;
+                addTriggerBtn.disabled = true;
+                statusMsg.className = "text-[11px] font-semibold text-rose-600 bg-rose-50 border border-rose-100 p-2 rounded-xl text-center";
+                statusMsg.innerHTML = "⚠️ Harap hubungkan Tautan Kirim di Panel 2!";
+            }
+        }
+
+        // Tes Get Webhook
+        async function testWebhook() {
+            if (!webhookUrl) {
+                showToast("Tolong masukkan URL Aplikasi Web Apps Script terlebih dahulu!", "error");
                 return;
             }
 
-            // Atur loading state
+            const btn = document.getElementById("btn-test-webhook");
+            btn.disabled = true;
+            btn.innerText = "Mengecek Koneksi...";
+
+            try {
+                const response = await fetch(webhookUrl, { method: "GET", mode: "cors" });
+                const res = await response.json();
+                if (res.status === "success") {
+                    showToast("Sempurna! Apps Script merespon dengan sukses.", "success");
+                } else {
+                    throw new Error();
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Pastikan Apps Script telah di-deploy dengan akses 'Siapa saja / Anyone'", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Tes Jalur Pengiriman";
+            }
+        }
+
+        // Tarik data dari google sheet CSV publik
+        async function syncDataFromSheet() {
+            const inputUrl = document.getElementById("sheet-url-input").value.trim();
+            if (!inputUrl) {
+                showToast("Harap masukkan URL Google Sheets Anda!", "error");
+                return;
+            }
+
             const btn = document.getElementById("btn-sync");
             const icon = document.getElementById("sync-icon");
             const text = document.getElementById("sync-text");
+
             btn.disabled = true;
             icon.classList.add("animate-spin");
-            text.innerText = "Sinkronisasi...";
+            text.innerText = "Memuat...";
 
             try {
-                // Modifikasi URL agar langsung ekspor ke CSV
                 let csvUrl = inputUrl;
                 if (inputUrl.includes("/edit")) {
                     csvUrl = inputUrl.split("/edit")[0] + "/export?format=csv";
@@ -360,80 +414,83 @@
                     csvUrl = inputUrl.replace("/pubhtml", "/pub?output=csv");
                 }
 
-                const response = await fetch(csvUrl);
-                if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets. Periksa izin pembagian!");
+                // Tambahkan nocache timestamp agar data tidak ter-cache oleh browser
+                const finalUrl = csvUrl + (csvUrl.includes("?") ? "&" : "?") + "t=" + Date.now();
 
-                const dataText = await response.text();
-                const parsed = parseCSVToCatalog(dataText);
+                const response = await fetch(finalUrl);
+                if (!response.ok) throw new Error();
 
-                if (parsed.length === 0) {
-                    showToast("Google Sheet terhubung, tapi tabel produk kosong atau format judul kolom salah!", "warning");
-                } else {
-                    syncedProducts = parsed;
-                    sheetUrl = inputUrl;
-                    localStorage.setItem("katalog_synced_products", JSON.stringify(syncedProducts));
-                    localStorage.setItem("katalog_sheet_url", sheetUrl);
-                    updateConnectionBadge(true);
-                    showToast(`Berhasil menyinkronkan ${syncedProducts.length} produk dari Google Sheets!`, "success");
-                }
+                const csvText = await response.text();
+                syncedProducts = parseCSVToCatalog(csvText);
+                sheetUrl = inputUrl;
+                
+                localStorage.setItem("katalog_synced", JSON.stringify(syncedProducts));
+                localStorage.setItem("katalog_url", sheetUrl);
 
+                showToast(`Etalase berhasil diperbarui dengan ${syncedProducts.length} produk!`, "success");
                 renderCatalog();
-                checkExportState();
-
             } catch (err) {
                 console.error(err);
-                showToast("Error: Periksa URL atau koneksi internet Anda!", "error");
+                showToast("Gagal mengambil data. Pastikan Sheets telah di-Publish ke Web sebagai CSV!", "error");
             } finally {
                 btn.disabled = false;
                 icon.classList.remove("animate-spin");
-                text.innerText = "Sinkronkan Data";
+                text.innerText = "Refresh Etalase";
             }
         }
 
-        // Putuskan koneksi Google Sheets
         function clearSheetConnection() {
-            if (confirm("Apakah Anda ingin memutuskan koneksi dari Google Sheets? Data sinkronisasi saat ini akan dihapus dari web.")) {
+            if (confirm("Ingin memutuskan tautan pembacaan?")) {
                 syncedProducts = [];
                 sheetUrl = "";
-                localStorage.removeItem("katalog_synced_products");
-                localStorage.removeItem("katalog_sheet_url");
+                localStorage.removeItem("katalog_synced");
+                localStorage.removeItem("katalog_url");
                 document.getElementById("sheet-url-input").value = "";
-                updateConnectionBadge(false);
                 renderCatalog();
-                showToast("Koneksi Google Sheets berhasil diputus.", "info");
+                showToast("Tautan pembacaan diputus.", "info");
             }
         }
 
-        // Format Cerdas Pendeteksi CSV (Koma atau Titik Koma Indonesia)
+        // Parser Pintar, Toleran terhadap BOM, Huruf Kapital, Spasi, dan Nama Kolom Variatif
         function parseCSVToCatalog(csvText) {
-            const rows = csvText.split(/\r?\n/).filter(row => row.trim() !== "");
-            if (rows.length < 1) return [];
-
-            // Deteksi pemisah (koma atau titik koma)
-            const firstRow = rows[0];
-            let delimiter = ",";
-            if (firstRow.includes(";")) {
-                delimiter = ";";
+            // Bersihkan BOM (Byte Order Mark) tersembunyi yang sering merusak index kolom pertama
+            if (csvText.startsWith('\ufeff')) {
+                csvText = csvText.substring(1);
+            } else if (csvText.charCodeAt(0) === 0xFEFF) {
+                csvText = csvText.substring(1);
             }
 
-            // Ambil headers (Judul Kolom)
-            const headers = firstRow.split(delimiter).map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
+            const rows = csvText.split(/\r?\n/).filter(r => r.trim() !== "");
+            if (rows.length < 1) return [];
+
+            const firstRow = rows[0];
+            const delimiter = firstRow.includes(";") ? ";" : ",";
             
-            // Map header index
-            const nameIdx = headers.indexOf("nama");
-            const catIdx = headers.indexOf("kategori");
-            const priceIdx = headers.indexOf("harga");
-            const descIdx = headers.indexOf("deskripsi");
-            const imgIdx = headers.indexOf("gambar");
-            const stokIdx = headers.indexOf("stok");
+            // Normalisasi Header (Hilangkan tanda kutip, spasi berlebih, dan ubah ke huruf kecil semua)
+            const headers = firstRow.split(delimiter).map(h => {
+                return h.trim().replace(/^"|"$/g, '').toLowerCase().replace(/[\u200B-\u200D\uFEFF]/g, '');
+            });
 
-            if (nameIdx === -1) return []; // Wajib ada nama produk
+            // Pencarian Index Fleksibel (Mendukung typo kecil, bahasa Inggris, dan huruf kapital)
+            const findIndex = (keywords) => {
+                return headers.findIndex(h => keywords.some(keyword => h.includes(keyword)));
+            };
 
-            const products = [];
+            const nameIdx = findIndex(["nama", "name", "barang", "produk", "title", "item"]);
+            const catIdx = findIndex(["kategori", "category", "jenis"]);
+            const priceIdx = findIndex(["harga", "price", "rate"]);
+            const descIdx = findIndex(["deskripsi", "description", "detail", "ket", "keterangan"]);
+            const imgIdx = findIndex(["gambar", "image", "photo", "foto", "url"]);
+            const stokIdx = findIndex(["stok", "stock", "qty", "jumlah"]);
 
-            // Loop data rows (mulai dari baris 1)
+            // Jika kolom nama minimal tidak ditemukan, beri tahu user di console log
+            if (nameIdx === -1) {
+                console.error("Kolom 'Nama' tidak ditemukan di baris pertama spreadsheet!");
+                return [];
+            }
+
+            const list = [];
             for (let i = 1; i < rows.length; i++) {
-                // Regex parsing CSV yang aman terhadap tanda kutip dua di dalam teks
                 const row = rows[i];
                 let cells = [];
                 let insideQuotes = false;
@@ -451,46 +508,97 @@
                     }
                 }
                 cells.push(currentCell.trim());
-
-                // Bersihkan kutip dua pembungkus
                 cells = cells.map(cell => cell.replace(/^"|"$/g, ''));
 
                 if (cells[nameIdx]) {
-                    products.push({
+                    list.push({
                         id: 'sheets-' + i,
-                        nama: cells[nameIdx] || "Produk Tanpa Nama",
-                        kategori: catIdx !== -1 ? (cells[catIdx] || "Umum") : "Umum",
+                        nama: cells[nameIdx],
+                        kategori: (catIdx !== -1 && cells[catIdx]) ? cells[catIdx] : "Umum",
                         harga: priceIdx !== -1 ? (parseFloat(cells[priceIdx].replace(/[^\d]/g, "")) || 0) : 0,
-                        deskripsi: descIdx !== -1 ? (cells[descIdx] || "-") : "-",
-                        gambar: imgIdx !== -1 ? (cells[imgIdx] || "") : "",
-                        stok: stokIdx !== -1 ? (parseInt(cells[stokIdx].replace(/[^\d]/g, "")) || 0) : 0,
-                        source: 'sheets' // Indikator data dari cloud sheets
+                        deskripsi: (descIdx !== -1 && cells[descIdx]) ? cells[descIdx] : "-",
+                        gambar: imgIdx !== -1 ? cells[imgIdx] : "",
+                        stok: stokIdx !== -1 ? (parseInt(cells[stokIdx].replace(/[^\d]/g, "")) || 0) : 0
                     });
                 }
             }
-
-            return products;
+            return list;
         }
 
-        // Render data ke etalase
+        // Tembak Data Otomatis ke Sheets
+        async function handleProductSubmission(e) {
+            e.preventDefault();
+
+            if (!webhookUrl) {
+                showToast("Tautan kirim otomatis belum terhubung!", "error");
+                return;
+            }
+
+            const name = document.getElementById("prod-name").value.trim();
+            const cat = document.getElementById("prod-cat").value.trim();
+            const price = parseFloat(document.getElementById("prod-price").value) || 0;
+            const stok = parseInt(document.getElementById("prod-stok").value) || 0;
+            const img = document.getElementById("prod-img").value.trim();
+            const desc = document.getElementById("prod-desc").value.trim();
+
+            const productData = {
+                nama: name,
+                kategori: cat,
+                harga: price,
+                deskripsi: desc,
+                gambar: img,
+                stok: stok
+            };
+
+            const submitBtn = document.getElementById("btn-submit-product");
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Mengirim ke Google Sheets...";
+
+            try {
+                // Post langsung ke Google Apps Script Web App Endpoint
+                await fetch(webhookUrl, {
+                    method: "POST",
+                    mode: "no-cors", // No-CORS aman untuk Apps Script POST redirect
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(productData)
+                });
+
+                showToast(`"${name}" Sukses Dikirim! Spreadsheet sedang memperbarui...`, "success");
+                
+                // Reset form & tutup modal
+                document.getElementById("add-product-form").reset();
+                closeAddModal();
+
+                // Tarik ulang data katalog dari CSV secara otomatis setelah 2 detik agar Google Server sempat mengupdate datanya
+                if (sheetUrl) {
+                    setTimeout(() => {
+                        syncDataFromSheet();
+                    }, 2000);
+                }
+
+            } catch (err) {
+                console.error(err);
+                showToast("Gagal mengirim produk ke Google Sheets.", "error");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Kirim Langsung ke Sheets 🚀";
+            }
+        }
+
+        // Render Katalog Grid
         function renderCatalog() {
             const grid = document.getElementById("catalog-grid");
             const emptyState = document.getElementById("empty-state");
             const searchVal = document.getElementById("search-input").value.toLowerCase();
             const catFilter = document.getElementById("category-filter").value;
 
-            // Gabungkan produk lokal dan produk sheets
-            const allProducts = [...localProducts, ...syncedProducts];
-
-            // Filter data
-            const filtered = allProducts.filter(p => {
+            const filtered = syncedProducts.filter(p => {
                 const matchesSearch = p.nama.toLowerCase().includes(searchVal) || p.deskripsi.toLowerCase().includes(searchVal);
                 const matchesCategory = catFilter === "" || p.kategori === catFilter;
                 return matchesSearch && matchesCategory;
             });
 
-            // Update Kategori dropdown dinamis
-            updateCategoryOptions(allProducts);
+            updateCategoryOptions(syncedProducts);
 
             if (filtered.length === 0) {
                 grid.innerHTML = "";
@@ -501,140 +609,35 @@
             emptyState.classList.add("hidden");
             grid.innerHTML = filtered.map(p => {
                 const imageSrc = p.gambar || "https://placehold.co/300x200/e2e8f0/64748b?text=Produk+Baru";
-                const isLocal = p.source === 'local';
-                const sourceBadge = isLocal 
-                    ? `<span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-1 rounded-lg border border-amber-200">Lokal 💻</span>`
-                    : `<span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-lg border border-emerald-200">Sheets ☁️</span>`;
 
                 return `
-                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-indigo-200 transition duration-300 flex flex-col justify-between overflow-hidden group">
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-emerald-200 transition duration-300 flex flex-col justify-between overflow-hidden group">
                         <div>
-                            <!-- Bagian Gambar -->
                             <div class="relative pt-[65%] bg-slate-100 overflow-hidden">
                                 <img src="${imageSrc}" onerror="this.onerror=null; this.src='https://placehold.co/300x200/e2e8f0/475569?text=Gambar+Rusak';" alt="${p.nama}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                <div class="absolute top-3 left-3 flex gap-2">
-                                    ${sourceBadge}
+                                <div class="absolute top-3 left-3">
+                                    <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-lg border border-emerald-200">Google Sheets ☁️</span>
                                 </div>
                             </div>
-                            <!-- Detail Produk -->
-                            <div class="p-5">
-                                <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-wider bg-indigo-50 px-2 py-1 rounded">${p.kategori}</span>
-                                <h4 class="text-base font-bold text-slate-900 mt-2 line-clamp-1" title="${p.nama}">${p.nama}</h4>
-                                <p class="text-xs text-slate-500 mt-1 line-clamp-2 h-8" title="${p.deskripsi}">${p.deskripsi}</p>
+                            <div class="p-4">
+                                <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">${p.kategori}</span>
+                                <h4 class="text-sm font-bold text-slate-900 mt-2 line-clamp-1">${p.nama}</h4>
+                                <p class="text-xs text-slate-500 mt-1 line-clamp-2 h-8">${p.deskripsi}</p>
                             </div>
                         </div>
-                        
-                        <div class="px-5 pb-5 pt-2 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                        <div class="px-4 pb-4 pt-2 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center text-xs">
                             <div>
-                                <span class="text-[10px] text-slate-400 block font-semibold uppercase tracking-wider">Harga</span>
-                                <span class="text-base font-extrabold text-slate-900">${formatRupiah(p.harga)}</span>
+                                <span class="text-[9px] text-slate-400 block font-semibold uppercase">Harga</span>
+                                <span class="text-sm font-extrabold text-slate-900">${formatRupiah(p.harga)}</span>
                             </div>
                             <div class="text-right">
-                                <span class="text-[10px] text-slate-400 block font-semibold uppercase tracking-wider">Stok</span>
+                                <span class="text-[9px] text-slate-400 block font-semibold uppercase">Stok</span>
                                 <span class="text-xs font-bold ${p.stok > 0 ? 'text-slate-800' : 'text-rose-600'}">${p.stok > 0 ? p.stok + ' Unit' : 'Habis'}</span>
                             </div>
                         </div>
                     </div>
                 `;
             }).join("");
-        }
-
-        // Simpan inputan produk baru dari modal
-        function saveNewProduct(e) {
-            e.preventDefault();
-
-            const name = document.getElementById("prod-name").value.trim();
-            const cat = document.getElementById("prod-cat").value.trim();
-            const price = parseFloat(document.getElementById("prod-price").value) || 0;
-            const stok = parseInt(document.getElementById("prod-stok").value) || 0;
-            const img = document.getElementById("prod-img").value.trim();
-            const desc = document.getElementById("prod-desc").value.trim();
-
-            const newProduct = {
-                id: 'local-' + Date.now(),
-                nama: name,
-                kategori: cat,
-                harga: price,
-                deskripsi: desc,
-                gambar: img,
-                stok: stok,
-                source: 'local'
-            };
-
-            localProducts.push(newProduct);
-            localStorage.setItem("katalog_local_products", JSON.stringify(localProducts));
-
-            document.getElementById("add-product-form").reset();
-            closeAddModal();
-            renderCatalog();
-            updateLocalCount();
-            checkExportState();
-            showToast("Produk lokal berhasil disimpan! Jangan lupa mengekspor ke Google Sheets.", "success");
-        }
-
-        // Hapus data lokal
-        function clearAllLocalProducts() {
-            if (localProducts.length === 0) {
-                showToast("Tidak ada produk lokal yang perlu dihapus.", "info");
-                return;
-            }
-
-            if (confirm("Apakah Anda yakin ingin menghapus semua produk berlabel 'Lokal 💻' di website ini? Pastikan Anda sudah mengopi datanya ke Google Sheets.")) {
-                localProducts = [];
-                localStorage.removeItem("katalog_local_products");
-                renderCatalog();
-                updateLocalCount();
-                checkExportState();
-                showToast("Semua produk lokal berhasil dibersihkan.", "success");
-            }
-        }
-
-        // Generate data ekspor CSV
-        function openExportModal() {
-            if (localProducts.length === 0) {
-                showToast("Tidak ada produk lokal baru untuk diekspor ke Google Sheets.", "info");
-                return;
-            }
-
-            // Tentukan tanda pemisah berdasarkan link (default: koma)
-            const delimiter = ";"; // Karena setelan Google Sheets Indonesia menggunakan titik koma
-
-            // Buat baris-baris data baru
-            const rows = localProducts.map(p => {
-                // Melindungi sel jika berisi tanda pemisah atau kutip dua
-                const escape = (text) => {
-                    const str = String(text).replace(/"/g, '""');
-                    return `"${str}"`;
-                };
-                return [
-                    escape(p.nama),
-                    escape(p.kategori),
-                    p.harga,
-                    escape(p.deskripsi),
-                    escape(p.gambar),
-                    p.stok
-                ].join(delimiter);
-            });
-
-            // Tampilkan data ke textarea (Tanpa judul kolom/header)
-            const exportText = rows.join("\n");
-            document.getElementById("export-textarea").value = exportText;
-
-            // Buka Modal
-            const modal = document.getElementById("export-modal");
-            modal.classList.remove("hidden");
-            setTimeout(() => {
-                modal.classList.add("opacity-100");
-                modal.querySelector(".transform").classList.remove("scale-95");
-            }, 10);
-        }
-
-        // Salin data CSV hasil ekspor ke clipboard
-        function copyExportText() {
-            const textarea = document.getElementById("export-textarea");
-            textarea.select();
-            document.execCommand('copy');
-            showToast("Baris produk baru berhasil disalin ke clipboard!", "success");
         }
 
         // Modals Toggle
@@ -654,60 +657,19 @@
             setTimeout(() => modal.classList.add("hidden"), 300);
         }
 
-        function closeExportModal() {
-            const modal = document.getElementById("export-modal");
-            modal.classList.remove("opacity-100");
-            modal.querySelector(".transform").classList.add("scale-95");
-            setTimeout(() => modal.classList.add("hidden"), 300);
-        }
-
-        // Helpers & UI Updates
+        // Helpers
         function formatRupiah(num) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
         }
 
-        function updateLocalCount() {
-            document.getElementById("local-count").innerText = `${localProducts.length} Produk`;
-        }
-
-        function updateConnectionBadge(connected) {
-            const badge = document.getElementById("connection-badge");
-            if (connected) {
-                badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200";
-                badge.innerHTML = `<span class="w-2 h-2 mr-2 bg-emerald-500 rounded-full"></span>Terhubung ke Sheets`;
-            } else {
-                badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200";
-                badge.innerHTML = `<span class="w-2 h-2 mr-2 bg-amber-500 rounded-full animate-pulse"></span>Belum Terhubung Sheets`;
-            }
-        }
-
-        function checkExportState() {
-            const box = document.getElementById("export-warning-box");
-            if (localProducts.length > 0) {
-                box.className = "bg-amber-50 border border-amber-100 rounded-xl p-3 flex items-start space-x-2 text-amber-800 animate-pulse";
-                box.innerHTML = `
-                    <svg class="w-5 h-5 flex-shrink-0 text-amber-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    <span class="text-[11px] leading-snug"><strong class="font-bold">Perhatian:</strong> Ada ${localProducts.length} data produk baru yang belum Anda masukkan ke Google Sheets. Tekan tombol ekspor!</span>
-                `;
-            } else {
-                box.className = "bg-emerald-50 border border-emerald-100 rounded-xl p-3 flex items-center space-x-2 text-emerald-800";
-                box.innerHTML = `
-                    <svg class="w-5 h-5 flex-shrink-0 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span class="text-xs leading-snug">Semua produk aman dan sinkron dengan Google Sheets!</span>
-                `;
-            }
-        }
-
-        function updateCategoryOptions(allProducts) {
+        function updateCategoryOptions(products) {
             const select = document.getElementById("category-filter");
             const currentVal = select.value;
-            const categories = [...new Set(allProducts.map(p => p.kategori))].filter(Boolean);
-            
+            const categories = [...new Set(products.map(p => p.kategori))].filter(Boolean);
             select.innerHTML = '<option value="">Semua Kategori</option>' + 
                 categories.map(c => `<option value="${c}" ${c === currentVal ? 'selected' : ''}>${c}</option>`).join("");
         }
 
-        // Custom Toast Notification System
         let toastTimeout;
         function showToast(message, type = "success") {
             const toast = document.getElementById("toast");
@@ -716,7 +678,6 @@
 
             toastMessage.innerText = message;
 
-            // Tema Toast berdasarkan tipe
             if (type === "success") {
                 toastIcon.className = "bg-emerald-500 text-white p-1 rounded-lg";
                 toastIcon.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
@@ -724,7 +685,7 @@
                 toastIcon.className = "bg-rose-500 text-white p-1 rounded-lg";
                 toastIcon.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
             } else {
-                toastIcon.className = "bg-indigo-500 text-white p-1 rounded-lg";
+                toastIcon.className = "bg-emerald-600 text-white p-1 rounded-lg";
                 toastIcon.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
             }
 
