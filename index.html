@@ -1161,18 +1161,24 @@
 
         // Parse CSV format from Google Sheets to Catalog Object array
         function parseCSVToCatalog(csvText) {
-            // Split rows safely
             const rows = csvText.split(/\r?\n/);
             if (rows.length <= 1) {
                 showToast("Tabel Google Sheets kosong atau format tidak sesuai.", "alert-triangle");
                 return;
             }
 
-            const parsedCatalog = [];
-            // Parse headers
-            const headers = rows[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
+            // DETEKSI OTOMATIS PEMISAH (Koma "," atau Titik-Koma ";")
+            // Google Sheets regional Indonesia menggunakan ";" sedangkan internasional menggunakan ","
+            let delimiter = ",";
+            if (rows[0].includes(";")) {
+                delimiter = ";";
+            }
 
-            // Map columns
+            const parsedCatalog = [];
+            // Parse headers dan bersihkan tanda petik jika ada
+            const headers = rows[0].split(delimiter).map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
+
+            // Map nama kolom secara fleksibel
             const nameIdx = headers.indexOf('nama');
             const catIdx = headers.indexOf('kategori');
             const priceIdx = headers.indexOf('harga');
@@ -1181,24 +1187,35 @@
             const stockIdx = headers.indexOf('stok');
 
             if (nameIdx === -1 || catIdx === -1 || priceIdx === -1) {
-                showToast("Kolom minimal 'Nama', 'Kategori', 'Harga' tidak ditemukan di Sheets Anda.", "alert-triangle");
+                showToast("Judul kolom 'Nama', 'Kategori', atau 'Harga' di baris pertama Google Sheets tidak ditemukan.", "alert-triangle");
                 return;
             }
 
+            let emptyRowsCount = 0;
             for (let i = 1; i < rows.length; i++) {
-                if (!rows[i].trim()) continue;
+                const currentRow = rows[i].trim();
+                if (!currentRow) continue;
                 
-                // Split handling quotes
-                const cells = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ''));
+                // Pisahkan kolom menggunakan delimiter yang terdeteksi dengan aman
+                let cells;
+                if (delimiter === ";") {
+                    cells = currentRow.split(/;(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ''));
+                } else {
+                    cells = currentRow.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ''));
+                }
                 
-                if (cells.length < 3) continue;
+                // Lewati jika kolom Nama kosong
+                if (!cells[nameIdx]) {
+                    emptyRowsCount++;
+                    continue;
+                }
 
                 const name = cells[nameIdx] || "";
                 const category = cells[catIdx] || "Umum";
-                const price = parseFloat(cells[priceIdx]) || 0;
+                const price = parseFloat(cells[priceIdx].replace(/[^0-9.-]+/g, "")) || 0; // Bersihkan jika ada format rupiah manual
                 const desc = descIdx !== -1 ? (cells[descIdx] || "") : "";
                 const img = imgIdx !== -1 ? (cells[imgIdx] || "") : "";
-                const stockVal = stockIdx !== -1 ? (cells[stockIdx] ? parseInt(cells[stockIdx]) : null) : null;
+                const stockVal = stockIdx !== -1 ? (cells[stockIdx] ? parseInt(cells[stockIdx].replace(/[^0-9]+/g, "")) : null) : null;
 
                 parsedCatalog.push({
                     name: name,
@@ -1210,6 +1227,11 @@
                     localImage: "",
                     stock: stockVal
                 });
+            }
+
+            if (parsedCatalog.length === 0) {
+                showToast("Gagal Sinkronisasi: Isi tabel Google Sheets Anda masih kosong di bawah baris judul!", "alert-triangle");
+                return;
             }
 
             catalog = parsedCatalog;
