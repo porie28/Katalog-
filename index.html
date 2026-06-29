@@ -49,6 +49,26 @@
     <!-- Main Content -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
+        <!-- Local File Warning Banner (Dinamis muncul jika file:/// dibuka) -->
+        <div id="local-file-warning" class="hidden bg-amber-50 border border-amber-200 text-amber-800 rounded-2xl p-5 mb-6 shadow-sm">
+            <div class="flex items-start gap-3">
+                <div class="bg-amber-500 text-white p-2 rounded-xl shrink-0 mt-0.5">
+                    <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="font-bold text-sm text-amber-900">PENTING: Aplikasi Dijalankan Secara Offline</h4>
+                    <p class="text-xs text-amber-700 leading-relaxed">
+                        Anda membuka file ini langsung dari komputer/HP (<code class="bg-amber-100/80 px-1 rounded font-mono text-xs">file:///</code>). Anda tetap bisa menginput data dan mengekspor ke Excel, namun **tombol "Bagikan Link" tidak akan bisa dibuka orang lain** karena file ini belum online di internet.
+                    </p>
+                    <div class="pt-1">
+                        <button onclick="openGuideModal()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
+                            <i data-lucide="help-circle" class="w-4 h-4"></i> Pelajari Cara Online Gratis Selamanya (Permanen)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Shared Data Alert (Jika membuka dari link orang lain) -->
         <div id="shared-alert" class="hidden bg-blue-50 border border-blue-200 text-blue-800 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div class="flex items-center gap-3">
@@ -70,23 +90,44 @@
             </div>
         </div>
 
+        <!-- Google Sheets Sync Banner (Jika sinkronisasi aktif) -->
+        <div id="sync-active-banner" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-600 text-white p-1.5 rounded-lg shrink-0 animate-pulse">
+                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm text-emerald-900">Sinkronisasi Google Sheets Aktif</h4>
+                    <p class="text-xs text-emerald-600" id="sync-status-text">Katalog ini terhubung langsung dengan spreadsheet Anda di Google Drive.</p>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="fetchGoogleSheetsData()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
+                    <i data-lucide="download-cloud" class="w-3.5 h-3.5"></i> Ambil Data Terbaru
+                </button>
+                <button onclick="disableGoogleSheets()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-xl transition">
+                    Putuskan Hubungan
+                </button>
+            </div>
+        </div>
+
         <!-- Welcome & Info Panel -->
         <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white rounded-2xl p-6 mb-8 shadow-xl relative overflow-hidden">
             <div class="relative z-10 max-w-3xl">
-                <span class="bg-emerald-500/30 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Koreksi Berbagi Link</span>
-                <h2 class="text-2xl font-bold mt-3 mb-2">Mengapa Link Berbagi Sangat Panjang?</h2>
+                <span class="bg-emerald-500/30 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Pembaruan Gambar & Fitur Stok</span>
+                <h2 class="text-2xl font-bold mt-3 mb-2">Bagikan Katalog Tanpa Kendala Gambar!</h2>
                 <p class="text-emerald-100/90 text-sm leading-relaxed mb-4">
-                    Sistem kami mengompres seluruh data produk Anda ke dalam link agar Anda tidak memerlukan server database berbayar yang rumit. Agar link ini bisa dibuka oleh orang lain, pastikan Anda meletakkan file HTML ini di hosting gratis (seperti GitHub Pages atau Tiiny.host) agar jalurnya berupa <strong class="text-yellow-300">https://</strong>, bukan <strong class="text-red-300">file:///</strong>.
+                    Kini Anda dapat langsung memilih gambar dari galeri HP, dan sistem pintar kami akan **mengompres ukuran file** secara otomatis sebelum dibagikan. Anda juga bisa langsung mengunggahnya ke server cloud gratis dengan 1 klik! Kelola juga ketersediaan stok barang Anda dengan mudah.
                 </p>
                 <div class="flex flex-wrap gap-4 text-xs text-emerald-200">
                     <div class="flex items-center gap-1.5">
-                        <i data-lucide="share-2" class="w-4 h-4 text-emerald-400"></i> Berbagi via Link Instan
+                        <i data-lucide="image" class="w-4 h-4 text-emerald-400"></i> Auto-Kompres Gambar Lokal
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-400"></i> Auto-formula Google Sheets
+                        <i data-lucide="boxes" class="w-4 h-4 text-emerald-400"></i> Opsi Pengelolaan Stok
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <i data-lucide="database" class="w-4 h-4 text-emerald-400"></i> Impor / Ekspor File Data
+                        <i data-lucide="cloud-lightning" class="w-4 h-4 text-emerald-400"></i> Sinkronisasi Google Sheets
                     </div>
                 </div>
             </div>
@@ -123,15 +164,25 @@
                                    class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm transition">
                         </div>
 
-                        <!-- Harga -->
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Harga (Rp) *</label>
-                            <div class="relative mt-1 rounded-xl shadow-sm">
-                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <span class="text-slate-400 text-sm">Rp</span>
+                        <!-- Harga & Stok Grid -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Harga -->
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Harga (Rp) *</label>
+                                <div class="relative mt-1 rounded-xl shadow-sm">
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <span class="text-slate-400 text-sm">Rp</span>
+                                    </div>
+                                    <input type="number" id="prod-price" required min="0" placeholder="0" 
+                                           class="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm transition">
                                 </div>
-                                <input type="number" id="prod-price" required min="0" placeholder="0" 
-                                       class="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm transition">
+                            </div>
+                            
+                            <!-- Stok -->
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Stok (Opsional)</label>
+                                <input type="number" id="prod-stock" min="0" placeholder="Contoh: 15" 
+                                       class="w-full mt-1 px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm transition">
                             </div>
                         </div>
 
@@ -152,7 +203,7 @@
                                 </button>
                                 <button type="button" id="tab-file" onclick="setImageMethod('file')" 
                                         class="py-1.5 text-xs font-medium rounded-lg border bg-slate-50 border-slate-200 text-slate-600 transition">
-                                    Upload File HP/PC
+                                    Pilih Gambar HP/PC
                                 </button>
                             </div>
 
@@ -160,19 +211,28 @@
                             <div id="image-url-container" class="space-y-1">
                                 <input type="url" id="prod-image-url" placeholder="https://example.com/gambar.jpg" 
                                        class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm transition">
-                                <span class="text-[10px] text-slate-400 block leading-tight">Direkomendasikan menggunakan link URL agar gambar bisa dibagikan lewat link dan tampil di Google Sheets.</span>
+                                <span class="text-[10px] text-slate-400 block leading-tight">Gunakan link URL langsung atau upload file lokal Anda ke server cloud gratis di tab sebelah kanan.</span>
                             </div>
 
-                            <!-- Input File Lokal -->
-                            <div id="image-file-container" class="hidden space-y-2">
+                            <!-- Input File Lokal dengan Auto-Compress & Auto-Upload -->
+                            <div id="image-file-container" class="hidden space-y-3">
                                 <div class="flex items-center justify-center w-full">
-                                    <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition">
+                                    <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition relative">
                                         <div class="flex flex-col items-center justify-center pt-3 pb-3">
                                             <i data-lucide="upload-cloud" class="w-6 h-6 text-slate-400 mb-1"></i>
-                                            <p class="text-xs text-slate-500">Pilih gambar dari perangkat</p>
+                                            <p class="text-xs text-slate-500">Pilih & Kompres Gambar</p>
                                         </div>
-                                        <input type="file" id="prod-image-file" accept="image/*" class="hidden" onchange="previewLocalImage(event)">
+                                        <input type="file" id="prod-image-file" accept="image/*" class="hidden" onchange="previewAndCompressLocalImage(event)">
                                     </label>
+                                </div>
+                                <div class="flex items-center justify-between bg-slate-100 p-2.5 rounded-xl border border-slate-200">
+                                    <div class="text-[11px] text-slate-600 leading-tight">
+                                        <span class="font-bold text-slate-800">Tips Agar Gambar Muncul di WA:</span><br>
+                                        Gunakan tombol unggah ke server internet gratis di bawah ini.
+                                    </div>
+                                    <button type="button" id="btn-cloud-upload" onclick="uploadToCloud()" disabled class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-2 rounded-lg transition shrink-0 opacity-50 cursor-not-allowed">
+                                        <span class="flex items-center gap-1"><i data-lucide="cloud-lightning" class="w-3.5 h-3.5"></i> Unggah ke Cloud</span>
+                                    </button>
                                 </div>
                             </div>
 
@@ -221,6 +281,7 @@
                             <option value="price-asc">Harga: Rendah ke Tinggi</option>
                             <option value="price-desc">Harga: Tinggi ke Rendah</option>
                             <option value="name-asc">Nama: A - Z</option>
+                            <option value="stock-desc">Stok Terbanyak</option>
                         </select>
                     </div>
                 </div>
@@ -243,12 +304,37 @@
                             <i data-lucide="package-x" class="w-8 h-8"></i>
                         </div>
                         <h4 class="text-base font-bold text-slate-800 mb-1">Katalog Anda Masih Kosong</h4>
-                        <p class="text-xs text-slate-500 max-w-sm mb-4">Mulai tambahkan produk pertama Anda menggunakan formulir di sebelah kiri.</p>
+                        <p class="text-xs text-slate-500 max-w-sm mb-4">Mulai tambahkan produk pertama Anda menggunakan formulir di sebelah kiri atau integrasikan dengan Google Sheets.</p>
                     </div>
 
                     <!-- Catalog Items Grid -->
                     <div id="catalog-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 p-5 hidden">
                         <!-- Rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- Google Sheets Database Integration Card -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm border-l-4 border-l-emerald-600">
+                    <h3 class="text-sm font-bold text-slate-900 mb-2 flex items-center gap-2">
+                        <i data-lucide="table-2" class="w-4 h-4 text-emerald-600"></i>
+                        Koneksi database Google Sheets (Real-time)
+                    </h3>
+                    <p class="text-xs text-slate-500 mb-4 leading-relaxed">
+                        Kelola produk Anda langsung dari spreadsheet. Publikasikan dokumen Google Sheets Anda sebagai format **CSV**, lalu tempelkan link URL CSV-nya di bawah ini.
+                    </p>
+                    <div class="space-y-3">
+                        <div>
+                            <input type="url" id="sheet-csv-url" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv" 
+                                   class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-xs transition">
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="saveAndSyncGoogleSheets()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3.5 py-2 rounded-xl transition flex items-center gap-1.5">
+                                <i data-lucide="link" class="w-3.5 h-3.5"></i> Hubungkan & Sinkronkan
+                            </button>
+                            <button onclick="openSheetsGuide()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+                                <i data-lucide="help-circle" class="w-3.5 h-3.5"></i> Panduan Membuat Tabel Sheets
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -270,18 +356,6 @@
                             <input type="file" id="import-json-file" accept=".json" class="hidden" onchange="importJSON(event)">
                         </label>
                     </div>
-                </div>
-
-                <!-- Guide Panel -->
-                <div class="bg-slate-100 rounded-2xl p-6 border border-slate-200">
-                    <h4 class="font-bold text-slate-900 flex items-center gap-2 mb-3 text-sm">
-                        <i data-lucide="help-circle" class="w-4 h-4 text-emerald-600"></i>
-                        Tips Berbagi Katalog yang Sukses:
-                    </h4>
-                    <ol class="list-decimal pl-5 text-xs text-slate-600 space-y-2">
-                        <li><strong>Gunakan URL Gambar:</strong> Saat membagikan via link, pastikan produk menggunakan metode "Link URL Gambar". Gambar yang diupload dari HP pribadi (lokal) memiliki ukuran data yang sangat besar sehingga tidak bisa dikompresi ke dalam link URL.</li>
-                        <li><strong>Uji Coba Kirim:</strong> Klik tombol "Bagikan Link" di kanan atas, salin link tersebut, lalu coba buka di tab baru browser atau kirimkan ke HP Anda sendiri untuk melihat hasilnya.</li>
-                    </ol>
                 </div>
 
             </div>
@@ -313,7 +387,7 @@
                     <p class="font-semibold mb-1">Pilih salah satu cara agar bisa dibagikan:</p>
                     <ul class="list-disc pl-4 space-y-1">
                         <li><strong>Cara Mudah:</strong> Gunakan fitur <strong>"Unduh File Data (.json)"</strong> di halaman utama lalu kirim file tersebut lewat WhatsApp beserta file HTML ini. Rekan Anda cukup mengunggahnya.</li>
-                        <li><strong>Cara Online:</strong> Unggah file HTML ini ke layanan web hosting gratis seperti <a href="https://tiiny.host/" target="_blank" class="underline font-bold hover:text-amber-950">tiiny.host</a> atau GitHub Pages agar memiliki link <code class="bg-amber-100 px-1 rounded">https://</code>.</li>
+                        <li><strong>Cara Online:</strong> Unggah file HTML ini ke layanan web hosting gratis seperti **Netlify** atau **GitHub Pages** agar memiliki link <code class="bg-amber-100 px-1 rounded">https://</code>.</li>
                     </ul>
                 </div>
             </div>
@@ -327,8 +401,117 @@
             
             <p id="share-warning" class="text-[11px] text-amber-600 hidden leading-normal">
                 <i data-lucide="alert-triangle" class="inline w-3.5 h-3.5 mr-1 align-text-bottom"></i>
-                <strong>Catatan Gambar:</strong> Beberapa produk Anda menggunakan file gambar lokal dari HP/PC. Gambar lokal tidak ikut terbawa dalam link sharing ini. Gunakan "Link URL Gambar" jika gambar ingin terlihat oleh orang lain.
+                <strong>Catatan Gambar:</strong> Beberapa produk Anda masih menggunakan gambar lokal tanpa kompresi maksimal. Gunakan tombol "Upload ke Cloud" agar gambar stabil tampil di WA orang lain.
             </p>
+        </div>
+    </div>
+
+    <!-- Interactive Guide Modal (Panduan Online Gratis Permanen) -->
+    <div id="guide-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeGuideModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h3 class="text-xl font-bold text-slate-900 mb-2 flex items-center gap-2">
+                <i data-lucide="help-circle" class="w-6 h-6 text-emerald-600"></i>
+                Panduan Hosting Gratis & Permanen (Selamanya)
+            </h3>
+            <p class="text-xs text-slate-500 mb-6">Berikut adalah dua layanan paling populer dan 100% gratis selamanya untuk menyimpan file aplikasi ini di internet.</p>
+            
+            <div class="space-y-6">
+                <!-- Metode 1: Netlify -->
+                <div class="border-b border-slate-100 pb-5">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-teal-100 text-teal-800 text-xs font-bold px-2 py-1 rounded">METODE 1</span>
+                        <h4 class="font-bold text-slate-900 text-sm">Netlify Drop (Paling Mudah, Drag & Drop)</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-3">Sangat direkomendasikan jika Anda ingin cepat dan tidak mau ribet menulis kode.</p>
+                    <ol class="list-decimal pl-5 text-xs text-slate-600 space-y-1.5">
+                        <li>Buat folder baru di komputer Anda, masukkan file <code class="bg-slate-100 px-1 py-0.5 rounded">index.html</code> (file aplikasi ini) ke dalam folder tersebut.</li>
+                        <li>Buka situs <a href="https://app.netlify.com/drop" target="_blank" class="text-blue-600 hover:underline font-bold">app.netlify.com/drop</a> di browser.</li>
+                        <li>Daftar akun gratis Netlify menggunakan Email atau Google (100% gratis selamanya).</li>
+                        <li>Seret (drag & drop) folder tersebut ke dalam kotak yang tersedia di situs Netlify.</li>
+                        <li>Situs Anda langsung online selamanya dengan alamat link berakhiran <code class="bg-slate-100 px-1 rounded font-mono">.netlify.app</code>!</li>
+                    </ol>
+                </div>
+
+                <!-- Metode 2: GitHub Pages -->
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">METODE 2</span>
+                        <h4 class="font-bold text-slate-900 text-sm">GitHub Pages (Sangat Stabil & Profesional)</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-3">Layanan resmi gratis milik Microsoft GitHub, sangat populer digunakan developer.</p>
+                    <ol class="list-decimal pl-5 text-xs text-slate-600 space-y-1.5">
+                        <li>Buka <a href="https://github.com" target="_blank" class="text-blue-600 hover:underline font-bold">GitHub.com</a> dan daftarkan akun baru secara gratis.</li>
+                        <li>Buat Repository baru dengan nama bebas (misal: <code class="bg-slate-100 px-1 rounded">katalogku</code>). Pilih opsi <strong>Public</strong>.</li>
+                        <li>Klik tulisan <strong>"uploading an existing file"</strong> pada layar awal repositori.</li>
+                        <li>Seret file <code class="bg-slate-100 px-1 rounded">index.html</code> Anda ke sana dan klik <strong>Commit changes</strong>.</li>
+                        <li>Pergi ke menu <strong>Settings</strong> (ikon roda gigi) -> pilih submenu <strong>Pages</strong> di sisi kiri.</li>
+                        <li>Di bagian <i>Build and deployment</i>, ganti pilihan None menjadi <strong>main</strong> (atau master), lalu klik <strong>Save</strong>.</li>
+                        <li>Tunggu 1 menit, web Anda online di alamat: <code class="bg-slate-100 px-1 rounded font-mono">https://username-anda.github.io/katalogku/</code>.</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="mt-6 pt-4 border-t border-slate-100 text-right">
+                <button onclick="closeGuideModal()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">
+                    Mengerti, Tutup Panduan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Sheets Guide Modal -->
+    <div id="sheets-guide-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl relative">
+            <button onclick="closeSheetsGuide()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
+                <i data-lucide="help-circle" class="w-5 h-5 text-emerald-600"></i>
+                Panduan Kolaborasi Google Sheets
+            </h3>
+            <p class="text-xs text-slate-600 mb-4 leading-relaxed">
+                Agar data Google Sheets dapat terbaca sempurna oleh aplikasi, buatlah kolom tabel Anda dengan susunan urutan judul baris pertama (Header) sebagai berikut:
+            </p>
+            
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 mb-4 overflow-x-auto">
+                <table class="text-xs w-full text-left font-mono">
+                    <thead>
+                        <tr class="bg-slate-200">
+                            <th class="p-1 px-2 border">Nama</th>
+                            <th class="p-1 px-2 border">Kategori</th>
+                            <th class="p-1 px-2 border">Harga</th>
+                            <th class="p-1 px-2 border">Deskripsi</th>
+                            <th class="p-1 px-2 border">Gambar</th>
+                            <th class="p-1 px-2 border">Stok</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="p-1 px-2 border">Disket</td>
+                            <td class="p-1 px-2 border">Komputer</td>
+                            <td class="p-1 px-2 border">5000</td>
+                            <td class="p-1 px-2 border">Memori Kuno</td>
+                            <td class="p-1 px-2 border">https://...</td>
+                            <td class="p-1 px-2 border">20</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="text-xs text-slate-600 mb-4 font-bold">Langkah mempublikasikannya menjadi CSV:</p>
+            <ol class="list-decimal pl-5 text-xs text-slate-600 space-y-1.5 mb-4">
+                <li>Di Google Sheets, klik menu <strong>File</strong> -> pilih <strong>Bagikan (Share)</strong> -> klik <strong>Publikasikan ke Web (Publish to web)</strong>.</li>
+                <li>Ubah format dari <i>Seluruh Dokumen (Web Page)</i> menjadi <strong>Nilai yang dipisahkan koma (.csv)</strong>.</li>
+                <li>Klik tombol <strong>Publikasikan</strong> dan konfirmasi.</li>
+                <li>Salin tautan/link URL yang muncul lalu tempelkan ke kolom koneksi di aplikasi.</li>
+            </ol>
+            
+            <button onclick="closeSheetsGuide()" class="w-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2 rounded-xl transition">
+                Mengerti
+            </button>
         </div>
     </div>
 
@@ -337,6 +520,17 @@
         <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 text-sm">
             <i id="toast-icon" data-lucide="info" class="w-5 h-5 text-emerald-400"></i>
             <span id="toast-message">Pesan notifikasi</span>
+        </div>
+    </div>
+
+    <!-- Image Lightbox Zoom Modal -->
+    <div id="lightbox-modal" class="fixed inset-0 bg-black/85 hidden items-center justify-center z-50 p-4" onclick="closeLightbox()">
+        <div class="max-w-3xl w-full flex flex-col items-center relative">
+            <button onclick="closeLightbox()" class="absolute -top-10 right-0 text-white hover:text-slate-300 flex items-center gap-1 text-sm font-semibold">
+                <i data-lucide="x" class="w-6 h-6"></i> Tutup
+            </button>
+            <img id="lightbox-img" src="" alt="Zoomed Image" class="max-h-[80vh] max-w-full object-contain rounded-xl shadow-2xl border border-white/10" onclick="event.stopPropagation()">
+            <p id="lightbox-caption" class="text-white text-sm font-semibold mt-4 text-center bg-black/60 px-4 py-2 rounded-xl"></p>
         </div>
     </div>
 
@@ -351,22 +545,24 @@
         // App State
         let myCatalog = [
             {
-                name: "Cappuccino Special Creamy",
-                category: "Minuman",
-                price: 24000,
-                description: "Espresso dengan racikan susu krim premium super lembut.",
+                name: "Disket",
+                category: "Komputer",
+                price: 5000,
+                description: "Media penyimpanan retro berkapasitas 1.44 MB.",
                 imageMethod: "url",
-                imageUrl: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=500&auto=format&fit=crop&q=60",
-                localImage: ""
+                imageUrl: "https://images.unsplash.com/photo-1544652417-2342dc242750?w=500&auto=format&fit=crop&q=60",
+                localImage: "",
+                stock: 25
             },
             {
-                name: "Croissant Almond Butter",
-                category: "Makanan",
-                price: 18500,
-                description: "Roti croissant renyah dengan taburan almond gurih.",
+                name: "Shimizu Pompa Air",
+                category: "Pompa Air",
+                price: 600000,
+                description: "Pompa air rumah tangga berkualitas tinggi daya hisap kuat.",
                 imageMethod: "url",
-                imageUrl: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=500&auto=format&fit=crop&q=60",
-                localImage: ""
+                imageUrl: "https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=500&auto=format&fit=crop&q=60",
+                localImage: "",
+                stock: 3
             }
         ];
 
@@ -376,6 +572,7 @@
 
         let currentImageMethod = 'url'; // 'url' or 'file'
         let currentLocalImageBase64 = '';
+        let googleSheetsUrl = '';
 
         // Initialize App
         window.addEventListener('DOMContentLoaded', () => {
@@ -387,6 +584,20 @@
                 } catch (e) {
                     console.error("Gagal memuat data dari memori lokal.", e);
                 }
+            }
+
+            // Load Google Sheets URL from Local Storage
+            const savedSheetsUrl = localStorage.getItem('katalog_sheets_url');
+            if (savedSheetsUrl) {
+                googleSheetsUrl = savedSheetsUrl;
+                document.getElementById('sheet-csv-url').value = googleSheetsUrl;
+                document.getElementById('sync-active-banner').classList.remove('hidden');
+                fetchGoogleSheetsData();
+            }
+
+            // Check if URL is local (file://)
+            if (window.location.protocol === 'file:') {
+                document.getElementById('local-file-warning').classList.remove('hidden');
             }
 
             // Check if URL has hash data (Shared Catalog)
@@ -418,7 +629,9 @@
                     catalog = [...myCatalog];
                 }
             } else {
-                catalog = [...myCatalog];
+                if (!googleSheetsUrl) {
+                    catalog = [...myCatalog];
+                }
             }
 
             renderCatalog();
@@ -461,7 +674,6 @@
                 return;
             }
 
-            // Detect if the file is opened locally (file://)
             const isLocal = window.location.protocol === 'file:';
             const localWarning = document.getElementById('local-detection-warning');
             
@@ -471,7 +683,6 @@
                 localWarning.classList.add('hidden');
             }
 
-            // Warning if any product uses Local Image File (it cannot be encoded to URL due to length limits)
             const hasLocalImages = catalog.some(item => item.imageMethod === 'file' && item.localImage);
             const warningElement = document.getElementById('share-warning');
             if (hasLocalImages) {
@@ -480,15 +691,16 @@
                 warningElement.classList.add('hidden');
             }
 
-            // Create a lightweight version of the catalog for sharing
+            // Create compressed sharing payload (keep stock & compress details)
             const shareableData = catalog.map(item => ({
                 name: item.name,
                 category: item.category,
                 price: item.price,
                 description: item.description,
-                imageMethod: item.imageMethod === 'file' ? 'url' : item.imageMethod,
-                imageUrl: item.imageMethod === 'file' ? '' : item.imageUrl,
-                localImage: "" // strip base64 to keep URL short
+                imageMethod: item.imageMethod,
+                imageUrl: item.imageUrl,
+                localImage: item.localImage, // Shared compressed local image if exists
+                stock: item.stock
             }));
 
             try {
@@ -515,13 +727,36 @@
         function copyShareURL() {
             const input = document.getElementById('share-url-input');
             input.select();
-            input.setSelectionRange(0, 99999); // For mobile devices
+            input.setSelectionRange(0, 99999);
             
-            // Clipboard Copy Guardrail Rule
             document.execCommand('copy');
             
-            showToast("Link berhasil disalin ke clipboard!", "check");
+            showToast("Link berhasil disalin!", "check");
             closeShareModal();
+        }
+
+        // Guide Modal Actions
+        function openGuideModal() {
+            const modal = document.getElementById('guide-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeGuideModal() {
+            const modal = document.getElementById('guide-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Google Sheets Guide Modal
+        function openSheetsGuide() {
+            document.getElementById('sheets-guide-modal').classList.remove('hidden');
+            document.getElementById('sheets-guide-modal').classList.add('flex');
+        }
+
+        function closeSheetsGuide() {
+            document.getElementById('sheets-guide-modal').classList.add('hidden');
+            document.getElementById('sheets-guide-modal').classList.remove('flex');
         }
 
         // Export data to JSON file
@@ -589,21 +824,103 @@
             }
         }
 
-        // Preview local image file and convert to base64
-        function previewLocalImage(event) {
+        // SMART COMPRESSION: Compress local image to small web size to keep storage tiny
+        function previewAndCompressLocalImage(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    currentLocalImageBase64 = e.target.result;
-                    
-                    const imgPreview = document.getElementById('img-preview');
-                    imgPreview.src = currentLocalImageBase64;
-                    document.getElementById('preview-filename').textContent = file.name;
-                    document.getElementById('image-preview-container').classList.remove('hidden');
+                    const img = new Image();
+                    img.onload = function() {
+                        // Create Canvas
+                        const canvas = document.createElement('canvas');
+                        const max_size = 350; // resize to max 350px width/height for hyper-compression
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > max_size) {
+                                height *= max_size / width;
+                                width = max_size;
+                            }
+                        } else {
+                            if (height > max_size) {
+                                width *= max_size / height;
+                                height = max_size;
+                            }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Compress quality to 0.65 JPEG
+                        currentLocalImageBase64 = canvas.toDataURL('image/jpeg', 0.65);
+                        
+                        const imgPreview = document.getElementById('img-preview');
+                        imgPreview.src = currentLocalImageBase64;
+                        document.getElementById('preview-filename').textContent = "Compressed: " + file.name + " (" + Math.round(currentLocalImageBase64.length / 1024) + " KB)";
+                        document.getElementById('image-preview-container').classList.remove('hidden');
+
+                        // Enable upload button
+                        const uploadBtn = document.getElementById('btn-cloud-upload');
+                        uploadBtn.disabled = false;
+                        uploadBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    };
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
             }
+        }
+
+        // Automatic Cloud Upload utilizing free ImgBB API (Using key or instruction)
+        function uploadToCloud() {
+            if (!currentLocalImageBase64) {
+                showToast("Pilih gambar terlebih dahulu!", "alert-triangle");
+                return;
+            }
+
+            const uploadBtn = document.getElementById('btn-cloud-upload');
+            uploadBtn.innerHTML = '<span class="flex items-center gap-1"><i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> Mengunggah...</span>';
+            uploadBtn.disabled = true;
+            lucide.createIcons();
+
+            // Extract base64 clean data
+            const cleanBase64 = currentLocalImageBase64.split(',')[1];
+            
+            // Post to ImgBB Anonymous Upload API
+            const formData = new FormData();
+            formData.append('image', cleanBase64);
+
+            // Utilizing a secure public uploading API key for seamless experience
+            fetch('https://api.imgbb.com/1/upload?key=6dadc99b867c222956cf4b3dc04c55db', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.data && data.data.url) {
+                    const onlineUrl = data.data.url;
+                    // Switch to URL method and insert the online URL automatically!
+                    setImageMethod('url');
+                    document.getElementById('prod-image-url').value = onlineUrl;
+                    document.getElementById('img-preview').src = onlineUrl;
+                    document.getElementById('preview-filename').textContent = "Online Link Generated!";
+                    showToast("Gambar sukses diunggah ke Cloud internet!", "cloud-lightning");
+                } else {
+                    showToast("Gagal mengunggah gambar ke cloud.", "alert-triangle");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showToast("Koneksi bermasalah saat upload.", "alert-triangle");
+            })
+            .finally(() => {
+                uploadBtn.innerHTML = '<span class="flex items-center gap-1"><i data-lucide="cloud-lightning" class="w-3.5 h-3.5"></i> Unggah ke Cloud</span>';
+                uploadBtn.disabled = false;
+                lucide.createIcons();
+            });
         }
 
         // Clear uploaded image state
@@ -612,6 +929,10 @@
             document.getElementById('prod-image-file').value = '';
             document.getElementById('prod-image-url').value = '';
             document.getElementById('image-preview-container').classList.add('hidden');
+            
+            const uploadBtn = document.getElementById('btn-cloud-upload');
+            uploadBtn.disabled = true;
+            uploadBtn.classList.add('opacity-50', 'cursor-not-allowed');
         }
 
         // Save State helper
@@ -632,6 +953,7 @@
             const name = document.getElementById('prod-name').value.trim();
             const category = document.getElementById('prod-category').value.trim();
             const price = parseFloat(document.getElementById('prod-price').value);
+            const stockInput = document.getElementById('prod-stock').value;
             const description = document.getElementById('prod-desc').value.trim();
             const imageUrl = document.getElementById('prod-image-url').value.trim();
 
@@ -640,14 +962,15 @@
 
             if (currentImageMethod === 'file') {
                 finalLocalImage = currentLocalImageBase64;
-                finalImageUrl = ''; // Clear URL if upload is local
+                finalImageUrl = '';
             }
 
-            // Validasi Sederhana
             if (!name || !category || isNaN(price)) {
                 showToast("Harap isi semua kolom wajib (*)!", "alert-triangle");
                 return;
             }
+
+            const stockVal = stockInput === "" ? null : parseInt(stockInput);
 
             const itemData = {
                 name,
@@ -656,15 +979,14 @@
                 description,
                 imageMethod: currentImageMethod,
                 imageUrl: finalImageUrl,
-                localImage: finalLocalImage
+                localImage: finalLocalImage,
+                stock: stockVal
             };
 
             if (editIndex > -1) {
-                // Edit existing
                 catalog[editIndex] = itemData;
                 showToast("Produk berhasil diperbarui!", "check");
             } else {
-                // Add new
                 catalog.unshift(itemData);
                 showToast("Produk baru berhasil ditambahkan!", "plus-circle");
             }
@@ -697,6 +1019,7 @@
             document.getElementById('prod-name').value = item.name;
             document.getElementById('prod-category').value = item.category;
             document.getElementById('prod-price').value = item.price;
+            document.getElementById('prod-stock').value = (item.stock === null || item.stock === undefined) ? "" : item.stock;
             document.getElementById('prod-desc').value = item.description || "";
 
             setImageMethod(item.imageMethod);
@@ -712,12 +1035,11 @@
                 currentLocalImageBase64 = item.localImage || "";
                 if (item.localImage) {
                     document.getElementById('img-preview').src = item.localImage;
-                    document.getElementById('preview-filename').textContent = "File Gambar Terunggah";
+                    document.getElementById('preview-filename').textContent = "Gambar Terkompresi";
                     document.getElementById('image-preview-container').classList.remove('hidden');
                 }
             }
 
-            // Scroll to form smoothly
             document.getElementById('product-form').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -753,7 +1075,6 @@
             const selectedVal = filterCategory.value;
             const uniqueCats = getCategories();
 
-            // Reset
             filterCategory.innerHTML = '<option value="ALL">Semua Kategori</option>';
 
             uniqueCats.forEach(cat => {
@@ -763,10 +1084,141 @@
                 filterCategory.appendChild(opt);
             });
 
-            // Keep selected
             if (uniqueCats.includes(selectedVal)) {
                 filterCategory.value = selectedVal;
             }
+        }
+
+        // Lightbox Zoom Handler
+        function openLightbox(imageUrl, title) {
+            const modal = document.getElementById('lightbox-modal');
+            const img = document.getElementById('lightbox-img');
+            const caption = document.getElementById('lightbox-caption');
+
+            img.src = imageUrl;
+            caption.textContent = title;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Google Sheets Sync Logic
+        function saveAndSyncGoogleSheets() {
+            const urlInput = document.getElementById('sheet-csv-url').value.trim();
+            if (!urlInput) {
+                showToast("Masukkan link URL CSV Google Sheets Anda!", "alert-triangle");
+                return;
+            }
+
+            googleSheetsUrl = urlInput;
+            localStorage.setItem('katalog_sheets_url', googleSheetsUrl);
+            document.getElementById('sync-active-banner').classList.remove('hidden');
+            fetchGoogleSheetsData();
+        }
+
+        function disableGoogleSheets() {
+            if (confirm("Apakah Anda ingin memutuskan koneksi Google Sheets? Katalog lokal Anda akan dikembalikan.")) {
+                googleSheetsUrl = '';
+                localStorage.removeItem('katalog_sheets_url');
+                document.getElementById('sync-active-banner').classList.add('hidden');
+                document.getElementById('sheet-csv-url').value = '';
+                
+                // Restore local storage catalog
+                const savedData = localStorage.getItem('katalog_data');
+                if (savedData) {
+                    myCatalog = JSON.parse(savedData);
+                }
+                catalog = [...myCatalog];
+                renderCatalog();
+                updateCategoryFilterOptions();
+                showToast("Koneksi Google Sheets diputus.", "info");
+            }
+        }
+
+        function fetchGoogleSheetsData() {
+            if (!googleSheetsUrl) return;
+
+            const statusText = document.getElementById('sync-status-text');
+            statusText.textContent = "Sedang mengambil data terbaru dari Google Sheets...";
+
+            fetch(googleSheetsUrl)
+                .then(res => res.text())
+                .then(csvText => {
+                    parseCSVToCatalog(csvText);
+                })
+                .catch(err => {
+                    console.error(err);
+                    statusText.textContent = "Koneksi gagal. Cek kembali tautan CSV Anda.";
+                    showToast("Gagal mengambil data dari Google Sheets. Pastikan sudah dipublish sebagai CSV.", "alert-triangle");
+                });
+        }
+
+        // Parse CSV format from Google Sheets to Catalog Object array
+        function parseCSVToCatalog(csvText) {
+            // Split rows safely
+            const rows = csvText.split(/\r?\n/);
+            if (rows.length <= 1) {
+                showToast("Tabel Google Sheets kosong atau format tidak sesuai.", "alert-triangle");
+                return;
+            }
+
+            const parsedCatalog = [];
+            // Parse headers
+            const headers = rows[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
+
+            // Map columns
+            const nameIdx = headers.indexOf('nama');
+            const catIdx = headers.indexOf('kategori');
+            const priceIdx = headers.indexOf('harga');
+            const descIdx = headers.indexOf('deskripsi');
+            const imgIdx = headers.indexOf('gambar');
+            const stockIdx = headers.indexOf('stok');
+
+            if (nameIdx === -1 || catIdx === -1 || priceIdx === -1) {
+                showToast("Kolom minimal 'Nama', 'Kategori', 'Harga' tidak ditemukan di Sheets Anda.", "alert-triangle");
+                return;
+            }
+
+            for (let i = 1; i < rows.length; i++) {
+                if (!rows[i].trim()) continue;
+                
+                // Split handling quotes
+                const cells = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"|"$/g, ''));
+                
+                if (cells.length < 3) continue;
+
+                const name = cells[nameIdx] || "";
+                const category = cells[catIdx] || "Umum";
+                const price = parseFloat(cells[priceIdx]) || 0;
+                const desc = descIdx !== -1 ? (cells[descIdx] || "") : "";
+                const img = imgIdx !== -1 ? (cells[imgIdx] || "") : "";
+                const stockVal = stockIdx !== -1 ? (cells[stockIdx] ? parseInt(cells[stockIdx]) : null) : null;
+
+                parsedCatalog.push({
+                    name: name,
+                    category: category,
+                    price: price,
+                    description: desc,
+                    imageMethod: "url",
+                    imageUrl: img,
+                    localImage: "",
+                    stock: stockVal
+                });
+            }
+
+            catalog = parsedCatalog;
+            renderCatalog();
+            updateCategoryFilterOptions();
+
+            const statusText = document.getElementById('sync-status-text');
+            statusText.textContent = `Sukses terhubung! Sinkronisasi otomatis: ${catalog.length} produk diimpor dari Google Sheets.`;
+            showToast(`Sukses sinkron ${catalog.length} produk!`, "check");
         }
 
         // Render Catalog Grid List
@@ -794,6 +1246,8 @@
                 filtered.sort((a, b) => b.price - a.price);
             } else if (sortVal === 'name-asc') {
                 filtered.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (sortVal === 'stock-desc') {
+                filtered.sort((a, b) => (b.stock || 0) - (a.stock || 0));
             } else if (sortVal === 'latest') {
                 filtered.sort((a, b) => a.originalIndex - b.originalIndex);
             }
@@ -817,10 +1271,26 @@
                                 <i data-lucide="image" class="w-8 h-8"></i>
                                </div>`;
                 
+                let zoomTargetUrl = "";
+
                 if (item.imageMethod === 'url' && item.imageUrl) {
-                    imgHTML = `<img src="${item.imageUrl}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'" class="w-20 h-20 object-cover rounded-xl border border-slate-100 shrink-0">`;
+                    zoomTargetUrl = item.imageUrl;
+                    imgHTML = `<img src="${item.imageUrl}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'" onclick="openLightbox('${zoomTargetUrl}', '${item.name}')" class="w-20 h-20 object-cover rounded-xl border border-slate-100 shrink-0 cursor-zoom-in hover:brightness-95 transition">`;
                 } else if (item.imageMethod === 'file' && item.localImage) {
-                    imgHTML = `<img src="${item.localImage}" alt="${item.name}" class="w-20 h-20 object-cover rounded-xl border border-slate-100 shrink-0">`;
+                    zoomTargetUrl = item.localImage;
+                    imgHTML = `<img src="${item.localImage}" alt="${item.name}" onclick="openLightbox('${zoomTargetUrl}', '${item.name}')" class="w-20 h-20 object-cover rounded-xl border border-slate-100 shrink-0 cursor-zoom-in hover:brightness-95 transition">`;
+                }
+
+                // Stock Badge Handler
+                let stockBadgeHTML = "";
+                if (item.stock !== null && item.stock !== undefined) {
+                    if (item.stock > 5) {
+                        stockBadgeHTML = `<span class="inline-block px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[10px] font-bold">Stok: ${item.stock}</span>`;
+                    } else if (item.stock > 0) {
+                        stockBadgeHTML = `<span class="inline-block px-2 py-0.5 bg-amber-100 text-amber-800 rounded text-[10px] font-bold">Stok Menipis: ${item.stock}</span>`;
+                    } else {
+                        stockBadgeHTML = `<span class="inline-block px-2 py-0.5 bg-red-100 text-red-800 rounded text-[10px] font-bold">Stok Habis</span>`;
+                    }
                 }
 
                 const card = document.createElement('div');
@@ -828,9 +1298,10 @@
                 card.innerHTML = `
                     ${imgHTML}
                     <div class="flex-1 min-w-0 pr-16">
-                        <div class="flex items-center gap-1.5 mb-1">
+                        <div class="flex flex-wrap items-center gap-1.5 mb-1">
                             <span class="inline-block px-2 py-0.5 bg-slate-200/70 text-slate-600 rounded text-[10px] font-bold uppercase tracking-wider">${item.category}</span>
-                            ${item.imageMethod === 'url' ? '<span class="inline-block px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-[10px] font-semibold">Spreadsheet Ready</span>' : ''}
+                            ${item.imageMethod === 'url' ? '<span class="inline-block px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[10px] font-semibold">Spreadsheet Ready</span>' : ''}
+                            ${stockBadgeHTML}
                         </div>
                         <h4 class="font-bold text-slate-900 text-sm truncate mb-0.5">${item.name}</h4>
                         <p class="text-xs text-slate-500 line-clamp-1 mb-2">${item.description || 'Tidak ada deskripsi'}</p>
@@ -849,7 +1320,6 @@
                 grid.appendChild(card);
             });
 
-            // Re-render newly injected lucide icons
             lucide.createIcons();
         }
 
@@ -861,7 +1331,7 @@
             }
 
             let csvRows = [
-                ["No", "Nama Produk", "Kategori", "Harga (Rp)", "Deskripsi", "Link URL Gambar", "Formula Gambar (Google Sheets)"]
+                ["No", "Nama Produk", "Kategori", "Harga (Rp)", "Stok", "Deskripsi", "Link URL Gambar", "Formula Gambar (Google Sheets)"]
             ];
 
             catalog.forEach((item, index) => {
@@ -877,6 +1347,7 @@
                     item.name,
                     item.category,
                     item.price,
+                    (item.stock === null || item.stock === undefined) ? "-" : item.stock,
                     item.description || "",
                     item.imageUrl || "[Terunggah Lokal]",
                     googleSheetsImageFormula
